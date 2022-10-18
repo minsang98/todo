@@ -48,8 +48,11 @@ function Todo({ data, doneHandler, deleteHandler, screenMode }) {
   const [newTitle, setNewTitle] = useState(title);
   const inputRef = useRef();
   const changeHandler = () => {
-    data.title = newTitle;
-    axios.patch(`http://localhost:3001/todos/${id}`, data);
+    setChange(!change);
+    if (change) {
+      data.title = newTitle;
+      axios.patch(`http://localhost:3001/todos/${id}`, data);
+    } else inputRef.current.focus();
   };
   return (
     <TodoComponent screenMode={screenMode}>
@@ -66,16 +69,7 @@ function Todo({ data, doneHandler, deleteHandler, screenMode }) {
           )}
         </span>
         <div className="action-icons">
-          <div
-            className="action-icon"
-            onClick={() => {
-              setChange(!change);
-              inputRef.current.focus();
-              if (change) {
-                changeHandler();
-              }
-            }}
-          >
+          <div className="action-icon" onClick={changeHandler}>
             <BsPencil />
           </div>
           <div className="action-icon complete" onClick={() => doneHandler(id)}>
