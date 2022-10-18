@@ -7,8 +7,6 @@ import Status from "../component/Status";
 import TodoInput from "../component/TodoInput";
 import TodoList from "../component/TodoList";
 
-import useInput from "../utils/useInput";
-
 const TodoPage = styled.div`
   width: 100vw;
   height: 100vh;
@@ -42,13 +40,6 @@ const TodoContainer = styled.div`
       letter-spacing: 0.25rem;
     }
   }
-
-  @media screen and (max-width: 720px) {
-    /* background: red; */
-    background: skyblue;
-    width: 100vw;
-    height: 100vh;
-  }
 `;
 
 function Todo() {
@@ -63,12 +54,12 @@ function Todo() {
     localStorage.setItem("screenMode", newScreenMode);
     setScreendMode(newScreenMode);
   }, [screenMode]);
-  const [todo, todoBind, todoReset] = useInput();
+
   const [todos, setTodos] = useState([]);
   const todosHandler = useCallback(
     (todo) => {
       const lastId = Math.max(...todos.map((v) => v.id));
-      const nextId = lastId !== -Infinity ? lastId + 1 : 0;
+      const nextId = lastId !== -Infinity ? lastId + 1 : 1;
       setTodos([...todos, { id: nextId, ...todo }]);
     },
     [todos]
@@ -93,6 +84,10 @@ function Todo() {
     },
     [todos]
   );
+  const clear = () => {
+    todos.forEach((v) => axios.delete(`http://localhost:3001/todos/${v.id}`));
+    setTodos([]);
+  };
   useEffect(() => {
     axios.get("http://localhost:3001/todos").then((res) => {
       setTodos(res.data);
@@ -106,12 +101,7 @@ function Todo() {
           <Mode screenMode={screenMode} screenModeHandler={screenModeHandler} />
         </header>
 
-        <TodoInput
-          screenMode={screenMode}
-          todoBind={todoBind}
-          todosHandler={todosHandler}
-          todoReset={todoReset}
-        />
+        <TodoInput screenMode={screenMode} todosHandler={todosHandler} />
         {todos && (
           <TodoList
             todos={todos}
@@ -120,7 +110,7 @@ function Todo() {
             screenMode={screenMode}
           />
         )}
-        <Status todos={todos} />
+        <Status todos={todos} clear={clear} />
         <Footer />
       </TodoContainer>
     </TodoPage>

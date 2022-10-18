@@ -33,7 +33,6 @@ const TodoComponent = styled.div`
 
 function Todo({ data, doneHandler, deleteHandler, screenMode }) {
   const { title, done, id } = data;
-  console.log("todo", id);
 
   return (
     <TodoComponent screenMode={screenMode}>

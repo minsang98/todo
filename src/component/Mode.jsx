@@ -17,7 +17,6 @@ const ModeComponent = styled.div`
 `;
 
 function Mode({ screenMode, screenModeHandler }) {
-  console.log("mode");
   return (
     <ModeComponent onClick={screenModeHandler} screenMode={screenMode}>
       {screenMode ? <BsSun /> : <MdNightlightRound />} Mode

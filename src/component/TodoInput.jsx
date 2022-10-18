@@ -1,4 +1,5 @@
 import React, { useCallback, memo } from "react";
+import useInput from "../utils/useInput";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -34,8 +35,8 @@ const TodoInputComponent = styled.form`
   }
 `;
 
-function TodoInput({ screenMode, todoBind, todoReset, todosHandler }) {
-  console.log("todo input");
+function TodoInput({ screenMode, todosHandler }) {
+  const [todo, todoBind, todoReset] = useInput();
   const submitHandler = useCallback(
     (e) => {
       e.preventDefault();
